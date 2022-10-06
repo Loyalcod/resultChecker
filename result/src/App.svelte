@@ -1,35 +1,27 @@
 <script>
-    import BackDrop from "./components/BackDrop.svelte";
-    import Footer from "./components/Footer.svelte";
-    import FormModal from "./components/FormModal.svelte";
-    import Header from "./components/Header.svelte";
-	
-	let showDrop = false;
-		const toggoleShowDrop = () =>{
-			showDrop = !showDrop
-		}
 
-let src = './images/result1.jpeg'
+	import page from 'page'
+    import Home from './pages/Home.svelte';
+    import Result from './pages/Result.svelte';
+	
+	let current;
+	let urlparams;
+
+	page('/', () => (current = Home))
+
+	page('/result/:email/:registrationNo', (ctx,next)=>{
+		urlparams = ctx.params 
+		next()
+	},
+	()=>(current = Result)
+	)
+
+	page.start()
+
 </script>
 
-<Header on:click={toggoleShowDrop} />
+<main>
+	<svelte:component this={current} {urlparams}/>
+</main>
 
-<BackDrop {showDrop} on:click={toggoleShowDrop} >
-	<FormModal />
-</BackDrop>
 
-<img src={src} alt="Student Result Checker">
-
-<Footer />
-
-<style>
-
-	img{
-		display: block;
-		width: 100vw;
-		height: 75vh;
-		object-fit: cover;
-	}
-	
-	
-</style>
