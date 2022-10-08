@@ -9,7 +9,7 @@
 
             <ul class="nav">
                 <li class="nav-item"><a href="/" class="nav-link link-light">Home</a></li>
-                <li on:click class="nav-item"><a href="#" class="nav-link link-light">Result Checker</a></li>
+                <li on:click class="nav-item"><a href="" class="nav-link link-light">Result Checker</a></li>
                 <li class="nav-item"><a href="#" class="nav-link link-light">Admin</a></li>
             </ul>
         </div>

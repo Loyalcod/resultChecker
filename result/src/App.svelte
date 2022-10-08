@@ -1,6 +1,6 @@
 <script>
 
-	import page from 'page'
+	import page from 'page';
     import Home from './pages/Home.svelte';
     import Result from './pages/Result.svelte';
 	

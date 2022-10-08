@@ -9,13 +9,24 @@
 			showDrop = !showDrop
 		}
 
-let src = '../images/result1.jpeg'
+	let src = '../images/result1.jpeg'
+
+	const prepareResult = (e) =>{
+		let email = e.detail.email
+		let regNo = e.detail.regNo
+		if((email === undefined || email === '' ) || (regNo === undefined || regNo === null)){
+			alert("please fill in your details")
+		}else{
+			window.location.assign(window.location.href + `result/${email}/${regNo}`)
+		}
+	}
+
 </script>
 
 <Header on:click={toggoleShowDrop} />
 
 <BackDrop {showDrop} on:click={toggoleShowDrop} >
-	<FormModal />
+	<FormModal on:sendE_RegNo={prepareResult}  />
 </BackDrop>
 
 <img src={src} alt="Student Result Checker">
