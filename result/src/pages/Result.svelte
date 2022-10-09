@@ -1,10 +1,11 @@
 <script>
-    import { each, onMount } from "svelte/internal";
+    import { onMount } from "svelte/internal";
     import BackDrop from "../components/backDrop.svelte";
     import Footer from "../components/Footer.svelte";
     import FormModal from "../components/FormModal.svelte";
     import Header from "../components/Header.svelte";
-    import Result from "../components/Result.svelte";
+    import SingleResult from "../components/SingleResult.svelte";
+   
 
     let showDrop = false;
     const toggoleShowDrop = ()=>{
@@ -16,6 +17,10 @@
     let regNo = urlparams.registrationNo;
     let result = []
 
+    let score = 0
+    let total = 0
+    let percentage = 0
+
     onMount(async () =>{
         try {
             const response = await fetch(`http://localhost:9000/result/${email}/${regNo}`)
@@ -23,19 +28,43 @@
             // console.log(data)
             result = data
             console.log(result)
+
+            if(result[0].resultId.length !== 0){
+               result[0].resultId.forEach(resultSub => {
+                score += resultSub.mark;
+                total += 100
+
+               });
+
+               percentage = (score/total*100)
+
+
+            }
             
         } catch (error) {
             console.log(error)
         }
     })
     
+
+    const prepareResult = (e) =>{
+		let email = e.detail.email
+		let regNo = e.detail.regNo
+		if((email === undefined || email === '' ) || (regNo === undefined || regNo === null)){
+			alert("please fill in your details")
+		}else{
+			let url = new URL(window.location.href + `result/${email}/${regNo}`)
+            let origin = url.origin
+            window.location.assign(origin+`/result/${email}/${regNo}`)
+		}
+	}
 </script>
 
 
 <Header  on:click={toggoleShowDrop} />
 
 <BackDrop {showDrop}  on:click={toggoleShowDrop} >
-    <FormModal />
+    <FormModal on:sendE_RegNo={prepareResult} />
 </BackDrop>
 
 <div class="container">
@@ -66,18 +95,18 @@
         <tbody class="table-group-divider">
            
             {#each result[0].resultId as resultSub, i }
-                <Result {resultSub} {i} />
+                <SingleResult {resultSub} {i} />
             {/each}
             
 
             <tr>
                 <td colspan="2" class="text-center"><strong>Total Score</strong></td>
-                <td><strong>150 Out of 300</strong></td>
+                <td><strong>{score} Out of {total}</strong></td>
             </tr>
 
             <tr>
                 <td colspan="2" class="text-center"><strong>Percentage</strong></td>
-                <td><strong>50%</strong></td>
+                <td><strong>{percentage}</strong></td>
             </tr>
         </tbody>
         {:else}
